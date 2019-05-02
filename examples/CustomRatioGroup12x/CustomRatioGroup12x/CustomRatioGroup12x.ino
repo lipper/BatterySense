@@ -1,6 +1,7 @@
 #include <Battery.h>
 
 //定义12块电池的电压范围和采集口
+//正常锂电的电压范围在标称电压的0.875~1.2倍之间？
 Battery battery1(7200, 8400, A0);
 Battery battery2(7200, 8400, A1);
 Battery battery3(7200, 8400, A2);
@@ -18,6 +19,13 @@ Battery battery12(7200, 8400, A11);
 int Vbatteries[12];
 //存放电池剩余电量水平%
 int Lbatteries[12];
+
+//电池电量低于50%认为是坏电池，无法充电
+#define BADBATTERYLEVEL 50
+//电池充电的起点75%
+#define LOWSTOPLEVEL 75
+//电池满电，对应到电压上应该有给额度，一般是1.2倍
+#define HIGHSTOPLEVEL 100
 
 /**
  * 电池电压高于5v，需要分压电路
@@ -101,5 +109,6 @@ void loop() {
   	Serial.print("mV (");
   	Serial.print(Lbatteries[i]);
   	Serial.println("%)");
+   
   }
 }
